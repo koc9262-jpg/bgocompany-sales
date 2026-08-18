@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-휴메이크/위스테이 매출 대시보드 자동 업데이트 스크립트 (GitHub Actions 용)
-data/ 폴더의 xlsx 파일을 파싱하여 index.html 을 생성합니다.
+í´ë©ì´í¬/ìì¤íì´ ë§¤ì¶ ëìë³´ë ìë ìë°ì´í¸ ì¤í¬ë¦½í¸ (GitHub Actions ì©)
+data/ í´ëì xlsx íì¼ì íì±íì¬ index.html ì ìì±í©ëë¤.
 """
 import openpyxl, os, re, json, sys
 from datetime import date
@@ -10,17 +10,17 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 data_dir = os.path.join(script_dir, 'data')
 
 if not os.path.exists(data_dir):
-    print("ERROR: data/ 폴더 없음", file=sys.stderr); sys.exit(1)
+    print("ERROR: data/ í´ë ìì", file=sys.stderr); sys.exit(1)
 
 all_xlsx = [f for f in os.listdir(data_dir)
             if re.match(r'\d{4}_b_', f) and f.endswith('.xlsx')]
 if not all_xlsx:
-    print("ERROR: xlsx 파일 없음", file=sys.stderr); sys.exit(1)
+    print("INFO: data/ 폴더에 xlsx 파일 없음 - 스킵", file=sys.stderr); sys.exit(0)
 
 prefixes = sorted(set(re.match(r'(\d{4})_', f).group(1)
                   for f in all_xlsx if re.match(r'(\d{4})_', f)))
 prefix = prefixes[-1]
-print(f"파싱 월: {prefix}", file=sys.stderr)
+print(f"íì± ì: {prefix}", file=sys.stderr)
 
 files = sorted([f for f in all_xlsx if f.startswith(prefix)])
 branch_files = {}
@@ -31,7 +31,7 @@ for f in files:
 
 b5_exists = any(re.match(rf'{prefix}_b_5_', k) for k in branch_files)
 if not b5_exists:
-    branch_files[f'{prefix}_b_5_장안점'] = None
+    branch_files[f'{prefix}_b_5_ì¥ìì '] = None
 
 results = []
 for key in sorted(branch_files.keys()):
@@ -50,7 +50,7 @@ for key in sorted(branch_files.keys()):
         wb = openpyxl.load_workbook(os.path.join(data_dir, fname), data_only=True)
     except Exception:
         wb = openpyxl.load_workbook(os.path.join(data_dir, fname), data_only=True, read_only=True)
-    ws = wb['매출'] if '매출' in wb.sheetnames else wb.active
+    ws = wb['ë§¤ì¶'] if 'ë§¤ì¶' in wb.sheetnames else wb.active
     rows = [[cell.value for cell in row] for row in ws.iter_rows()]
     def pct(v):
         if v is None: return 0.0
@@ -58,8 +58,8 @@ for key in sorted(branch_files.keys()):
         return round(v * 100, 1) if abs(v) < 10 else round(v, 1)
     r7 = rows[7]; r10 = rows[10]
     ranks = []
-    if '매출순위' in wb.sheetnames:
-        ws2 = wb['매출순위']
+    if 'ë§¤ì¶ìì' in wb.sheetnames:
+        ws2 = wb['ë§¤ì¶ìì']
         for row in list(ws2.iter_rows())[3:]:
             rv = [c.value for c in row]
             nm, amt = rv[3], rv[4]
@@ -76,17 +76,17 @@ for key in sorted(branch_files.keys()):
         'total_card': int(r10[12] or 0), 'cash_out': int(r10[14] or 0),
         'account': int(r10[16] or 0), 'deduction': int(r10[18] or 0),
         'real_cash_out': int(r10[20] or 0), 'ranks': ranks})
-    print(f"  ✓ {fname}", file=sys.stderr)
+    print(f"  â {fname}", file=sys.stderr)
 
-today_str = date.today().strftime('%Y년 %m월 %d일')
+today_str = date.today().strftime('%Yë %mì %dì¼')
 data_json = json.dumps(results, ensure_ascii=False)
 
 html = open(os.path.join(script_dir, 'index.html')).read()
 import re as _re
 html = _re.sub(r'const D_RAW = .*?;', f'const D_RAW = {data_json};', html)
-html = _re.sub(r"기준일:.*?·", f'기준일: {today_str} ·', html)
+html = _re.sub(r"ê¸°ì¤ì¼:.*?Â·", f'ê¸°ì¤ì¼: {today_str} Â·', html)
 
 output_path = os.path.join(script_dir, 'index.html')
 with open(output_path, 'w', encoding='utf-8') as f:
     f.write(html)
-print(f'완료: {output_path}', file=sys.stderr)
+print(f'ìë£: {output_path}', file=sys.stderr)
