@@ -47,17 +47,17 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
 .rb{display:inline-block;padding:5px 12px;border-radius:10px;font-size:0.85rem;font-weight:800;min-width:60px;text-align:center}
 .rb-good{background:rgba(124,58,237,.25);border:1px solid rgba(124,58,237,.5);color:#a78bfa}
 .rb-ok{background:rgba(16,185,129,.2);border:1px solid rgba(16,185,129,.4);color:#34d399}
-.rb-warn{background:rgba(245,158,11,.2);border:1px solid rgba(245,158,11,.4);color:#fbbf24}
+.rb-warn{border:1px solid rgba(245,158,11,.4);color:#fbbf24}
 .rb-bad{background:rgba(239,68,68,.2);border:1px solid rgba(239,68,68,.4);color:#fca5a5}
 .pr-rows{margin:0 0 10px}
 .pr-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
 .pr-label{font-size:0.65rem;font-weight:700;color:var(--muted);width:24px;flex-shrink:0;text-transform:uppercase}
-.pr-bar-bg{flex:1;height:7px;background:var(--bg2);border-radius:4px;overflow:hidden}
+.pr-bar-bg{flex:1;height:7px;background:var(--bg2);border-radius:4px�verflow:hidden}
 .pr-bar-fill{height:100%;border-radius:4px}
 .pr-pct{font-size:0.7rem;font-weight:800;width:36px;text-align:right;flex-shrink:0}
 .pr-nums{font-size:0.63rem;color:var(--muted);width:100px;text-align:right;flex-shrink:0;white-space:nowrap}
 .bc-counts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-.cnt-tag{font-size:0.68rem;padding:3px 8px;border-radius:6px;font-weight:600;white-space:nowrap}
+.cnt-tag{font-size:0.68rem;padding:3% 8px;border-radius:6px;font-weight:600;white-space:nowrap}
 .cnt-fc{background:rgba(59,130,246,.15);color:#60a5fa}
 .cnt-pt{background:rgba(139,92,246,.15);color:#a78bfa}
 .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
@@ -92,7 +92,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
 <div class="header">
   <div class="header-left">
     <h1>🏋️ <span>BGO</span> 매출 대시보드</h1>
-    <div class="date">기준일: 2026년 08월 18일 · 전체 지점</div>
+    <div class="date">기준일: 2026년 08월 19일 · 전체 지점</div>
   </div>
   <div class="header-right">
     <div class="hbadge hbadge-green" id="h-report"></div>
@@ -153,11 +153,11 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
   </div>
 </div>
 
-<div class="footer">휴메이크휘트니스 · 위스테이피트니스 · 모션하이브 | 데이터 기준: 2026년 08월 18일 | 매일 14:00 자동 갱신</div>
+<div class="footer">휴메이크휘트니스 · 위스테이피트니스 · 모션하이브 | 데이터 기준: 2026년 08월 19일 | 매일 14:00 자동 갱신</div>
 
 <script>
 const D_RAW = [{"branch": "역삼점", "target_fc": 25000000, "target_pt": 40000000, "target_tot": 65000000, "actual_fc": 10028000, "actual_pt": 11004000, "actual_tot": 21032000, "rate_fc": 40.1, "rate_pt": 27.5, "rate_tot": 32.4, "fc_new_cnt": 19, "fc_new_amt": 2542500, "fc_re_cnt": 18, "fc_re_amt": 6313000, "pt_new_cnt": 11, "pt_new_amt": 4154000, "pt_re_cnt": 10, "pt_re_amt": 6850000, "total_card": 20767000, "cash_out": 50000, "account": 215000, "deduction": 0, "real_cash_out": 265000, "ranks": [{"name": "이초은", "amount": 5524000}, {"name": "황하늘", "amount": 50000}, {"name": "진정경", "amount": 750000}, {"name": "안도모", "amount": 4260000}, {"name": "김동옥", "amount": 130000}, {"name": "안재원", "amount": 50000}]}, {"branch": "선정릉점", "target_fc": 42000000, "target_pt": 73000000, "target_tot": 115000000, "actual_fc": 12511000, "actual_pt": 30325000, "actual_tot": 42836000, "rate_fc": 29.8, "rate_pt": 41.5, "rate_tot": 37.2, "fc_new_cnt": 31, "fc_new_amt": 6758500, "fc_re_cnt": 13, "fc_re_amt": 4480600, "pt_new_cnt": 13, "pt_new_amt": 14755000, "pt_re_cnt": 9, "pt_re_amt": 15570000, "total_card": 40686000, "cash_out": 241000, "account": 1909000, "deduction": 2221000, "real_cash_out": -71000, "ranks": [{"name": "변재용", "amount": 7608000}, {"name": "장광희", "amount": 5602000}, {"name": "최성욱", "amount": 7085000}, {"name": "전현동", "amount": 80000}, {"name": "조건우", "amount": 80000}, {"name": "김영인", "amount": 3570000}, {"name": "황용선", "amount": 6300000}]}, {"branch": "대치점", "target_fc": 43000000, "target_pt": 77000000, "target_tot": 120000000, "actual_fc": 8667900, "actual_pt": 37154500, "actual_tot": 45822400, "rate_fc": 20.2, "rate_pt": 48.3, "rate_tot": 38.2, "fc_new_cnt": 23, "fc_new_amt": 4789900, "fc_re_cnt": 6, "fc_re_amt": 2657000, "pt_new_cnt": 12, "pt_new_amt": 14054500, "pt_re_cnt": 17, "pt_re_amt": 23100000, "total_card": 37937400, "cash_out": 7805000, "account": 80000, "deduction": 1505000, "real_cash_out": 6380000, "ranks": [{"name": "이상훈", "amount": 4360800}, {"name": "배재민", "amount": 8856900}, {"name": "김준석", "amount": 8025000}, {"name": "전현아", "amount": 6480000}, {"name": "김민준", "amount": 1038800}, {"name": "이만열", "amount": 65000}, {"name": "최태원", "amount": 1050000}, {"name": "이기현", "amount": 5718000}, {"name": "한희수", "amount": 1560000}]}, {"branch": "송파점", "target_fc": 20000000, "target_pt": 45000000, "target_tot": 65000000, "actual_fc": 5948000, "actual_pt": 5420000, "actual_tot": 11368000, "rate_fc": 29.7, "rate_pt": 12.0, "rate_tot": 17.5, "fc_new_cnt": 16, "fc_new_amt": 3800600, "fc_re_cnt": 9, "fc_re_amt": 1813000, "pt_new_cnt": 0, "pt_new_amt": 0, "pt_re_cnt": 3, "pt_re_amt": 5420000, "total_card": 7538600, "cash_out": 3829400, "account": 0, "deduction": 4091000, "real_cash_out": -261600, "ranks": [{"name": "김원준", "amount": 3620000}, {"name": "김건우", "amount": 1800000}]}, {"branch": "장안점", "target_fc": 45000000, "target_pt": 65000000, "target_tot": 110000000, "actual_fc": 17436300, "actual_pt": 13200000, "actual_tot": 30636300, "rate_fc": 38.7, "rate_pt": 20.3, "rate_tot": 27.9, "fc_new_cnt": 25, "fc_new_amt": 9024000, "fc_re_cnt": 17, "fc_re_amt": 6645000, "pt_new_cnt": 4, "pt_new_amt": 3300000, "pt_re_cnt": 10, "pt_re_amt": 9900000, "total_card": 28014500, "cash_out": 843000, "account": 1778800, "deduction": 833800, "real_cash_out": 1788000, "ranks": [{"name": "김민수", "amount": 8580000}, {"name": "송림명", "amount": 330000}, {"name": "이윤석", "amount": 2112000}, {"name": "한어진", "amount": 2178000}]}, {"branch": "가락점", "target_fc": 28000000, "target_pt": 40000000, "target_tot": 68000000, "actual_fc": 12791000, "actual_pt": 9800000, "actual_tot": 22591000, "rate_fc": 45.7, "rate_pt": 24.5, "rate_tot": 33.2, "fc_new_cnt": 25, "fc_new_amt": 5691000, "fc_re_cnt": 17, "fc_re_amt": 5127000, "pt_new_cnt": 11, "pt_new_amt": 8740000, "pt_re_cnt": 2, "pt_re_amt": 1060000, "total_card": 21187000, "cash_out": 670000, "account": 734000, "deduction": 300000, "real_cash_out": 1104000, "ranks": [{"name": "송석민", "amount": 2300000}, {"name": "김필구", "amount": 3460000}, {"name": "고승우", "amount": 1100000}, {"name": "한승희", "amount": 1680000}, {"name": "현민호", "amount": 600000}]}, {"branch": "삼전점", "target_fc": 25000000, "target_pt": 43000000, "target_tot": 68000000, "actual_fc": 9295200, "actual_pt": 15089000, "actual_tot": 24384200, "rate_fc": 37.2, "rate_pt": 35.1, "rate_tot": 35.9, "fc_new_cnt": 19, "fc_new_amt": 2580000, "fc_re_cnt": 17, "fc_re_amt": 4810000, "pt_new_cnt": 14, "pt_new_amt": 5752000, "pt_re_cnt": 9, "pt_re_amt": 9337000, "total_card": 16614200, "cash_out": 5726000, "account": 2044000, "deduction": 0, "real_cash_out": 7770000, "ranks": [{"name": "두민기", "amount": 2200000}, {"name": "윤휘용", "amount": 9719000}, {"name": "정회민", "amount": 150000}, {"name": "이재환", "amount": 3020000}]}];
-const DATE_STR = '2026년 08월 18일';
+const DATE_STR = '2026년 08월 19일';
 const PREFIX = '2608';
 
 const w = v => Math.round(v / 10000);
