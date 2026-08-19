@@ -30,9 +30,18 @@ jobs:
         run: |
           TODAY=$(date +%y%m)
           COUNT=$(ls data/${TODAY}*.xlsx 2>/dev/null | wc -l | tr -d ' ')
-          echo "Today files: $COUNT"
-          DATE_KR=$(date +"%Y년 %m월 %d일")
-          MESSAGE="🎉 BGO 매출 대시보드 업데이트 완료!%0A📅 기준일: ${DATE_KR}%0A📊 7개 지점 전체 파일 수신 완료%0A🔗 https://koc9262-jpg.github.io/bgocompany-sales/"
+          HOUR_KST=$(TZ=Asia/Seoul date +%H)
+          DATE_KR=$(TZ=Asia/Seoul date +"%Y년 %m월 %d일")
+          echo "Today files: $COUNT / Hour KST: $HOUR_KST"
+          if [ "$COUNT" -ge 7 ]; then
+            MESSAGE="✅ BGO 매출 대시보드 업데이트 완료!%0A📅 기준일: ${DATE_KR}%0A📊 7개 지점 전체 파일 수신 완료%0A🔗 https://koc9262-jpg.github.io/bgocompany-sales/"
+          elif [ "$HOUR_KST" -lt 15 ]; then
+            MISSING=$((7 - COUNT))
+            MESSAGE="⏳ BGO 오후 2시 체크: ${COUNT}/7개 수신%0A📅 ${DATE_KR}%0A⚠️ ${MISSING}개 지점 미수신 — 오후 3시 재체크 예정%0A🔗 https://koc9262-jpg.github.io/bgocompany-sales/"
+          else
+            MISSING=$((7 - COUNT))
+            MESSAGE="⚠️ BGO 오후 3시 최종 체크: ${COUNT}/7개 수신%0A📅 ${DATE_KR}%0A❌ ${MISSING}개 지점 미수신 — 수동 확인 필요%0A🔗 https://koc9262-jpg.github.io/bgocompany-sales/"
+          fi
           curl -s -X POST "https://api.telegram.org/bot${TG_TOKEN}/sendMessage" \
             -d "chat_id=${TG_CHAT}&text=${MESSAGE}"
           echo "Telegram notification sent!"
