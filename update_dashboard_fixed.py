@@ -21,90 +21,114 @@ print(f"Parsing prefix: {prefix}", file=sys.stderr)
 files = sorted([f for f in all_xlsx if f.startswith(prefix)])
 branch_files = {}
 for f in files:
-    m = re.match(rf'({prefix}_b_\d+_\S+?)(?:\s*\(\d+\))?\.xlsx', f)
+    # 파일명에서 (1), (2) 같은 중복 번호 제거하고 key 생성
+    m = re.match(rf'({prefix}_b_\d+_.+?)(?:\s*\(\d+\))?\.xlsx$', f)
     key = m.group(1) if m else re.sub(r'\.xlsx$', '', f)
     branch_files[key] = f
 
-b5_exists = any(re.match(rf'{prefix}_b_5', k) for k in branch_files)
-if not b5_exists:
-    branch_files[f'{prefix}_b_5_jangan'] = None
-
 def safe(row, i):
     try: return row[i]
-    except IndexError: return None
+    except (IndexError, TypeError): return None
 
 def pct(v):
     if v is None: return 0.0
-    v = float(v)
-    return round(v * 100, 1) if abs(v) < 10 else round(v, 1)
+    try:
+        v = float(v)
+        return round(v * 100, 1) if abs(v) < 10 else round(v, 1)
+    except: return 0.0
+
+def to_int(v):
+    if v is None: return 0
+    try: return int(float(v))
+    except: return 0
 
 results = []
 for key in sorted(branch_files.keys()):
     fname = branch_files[key]
-    if fname is None:
-        branch_name = key.split('_', 3)[-1]
-        results.append({'branch': branch_name, 'target_fc': 0, 'target_pt': 0, 'target_tot': 0,
-            'actual_fc': 0, 'actual_pt': 0, 'actual_tot': 0,
-            'rate_fc': 0.0, 'rate_pt': 0.0, 'rate_tot': 0.0,
-            'fc_new_cnt': 0, 'fc_new_amt': 0, 'fc_re_cnt': 0, 'fc_re_amt': 0,
-            'pt_new_cnt': 0, 'pt_new_amt': 0, 'pt_re_cnt': 0, 'pt_re_amt': 0,
-            'total_card': 0, 'cash_out': 0, 'account': 0, 'deduction': 0, 'real_cash_out': 0,
-            'ranks': []})
-        continue
+    fpath = os.path.join(data_dir, fname)
+    print(f"Reading {fname}", file=sys.stderr)
     try:
-        wb = openpyxl.load_workbook(os.path.join(data_dir, fname), data_only=True)
-    except Exception:
-        wb = openpyxl.load_workbook(os.path.join(data_dir, fname), data_only=True, read_only=True)
-    ws = wb['sheet1'] if 'sheet1' in [s.lower() for s in wb.sheetnames] else wb.active
+        wb = openpyxl.load_workbook(fpath, data_only=True)
+    except Exception as e:
+        print(f"  ERROR loading {fname}: {e}", file=sys.stderr)
+        continue
+
+    # 매출 시트 찾기
+    ws = wb.active
     for sname in wb.sheetnames:
-        if sname == '매출':
+        if '매출' in sname or sname.lower() == 'sheet1':
             ws = wb[sname]
             break
+
     rows = [[cell.value for cell in row] for row in ws.iter_rows()]
+
+    # 지점명: row 0, col 20
+    branch_name = safe(rows[0], 20) if rows else None
+    if not branch_name:
+        # 파일명에서 지점명 추출
+        m2 = re.match(rf'{prefix}_b_\d+_(.+?)_총매출', fname)
+        branch_name = m2.group(1) if m2 else key
+
+    r2 = rows[2] if len(rows) > 2 else []
+    r3 = rows[3] if len(rows) > 3 else []
+    r4 = rows[4] if len(rows) > 4 else []
     r7 = rows[7] if len(rows) > 7 else []
     r10 = rows[10] if len(rows) > 10 else []
+
+    # PT 순위 시트
     ranks = []
     for sname in wb.sheetnames:
         if '순위' in sname:
             ws2 = wb[sname]
             for row in list(ws2.iter_rows())[3:]:
                 rv = [c.value for c in row]
-                nm, amt = safe(rv,3), safe(rv,4)
+                nm = safe(rv, 3)
+                amt = safe(rv, 4)
                 if isinstance(nm, str) and nm.strip() and isinstance(amt, (int, float)) and amt > 0:
                     ranks.append({'name': nm.strip(), 'amount': int(amt)})
-    results.append({'branch': safe(rows[0],20) if rows else None,
-        'target_fc': int(safe(rows[2],2) or 0) if len(rows)>2 else 0,
-        'target_pt': int(safe(rows[2],4) or 0) if len(rows)>2 else 0,
-        'target_tot': int(safe(rows[2],6) or 0) if len(rows)>2 else 0,
-        'actual_fc': int(safe(rows[3],2) or 0) if len(rows)>3 else 0,
-        'actual_pt': int(safe(rows[3],4) or 0) if len(rows)>3 else 0,
-        'actual_tot': int(safe(rows[3],6) or 0) if len(rows)>3 else 0,
-        'rate_fc': pct(safe(rows[4],2)) if len(rows)>4 else 0.0,
-        'rate_pt': pct(safe(rows[4],4)) if len(rows)>4 else 0.0,
-        'rate_tot': pct(safe(rows[4],6)) if len(rows)>4 else 0.0,
-        'fc_new_cnt': int(safe(r7,10) or 0), 'fc_new_amt': int(safe(r7,11) or 0),
-        'fc_re_cnt': int(safe(r7,12) or 0), 'fc_re_amt': int(safe(r7,13) or 0),
-        'pt_new_cnt': int(safe(r7,17) or 0), 'pt_new_amt': int(safe(r7,18) or 0),
-        'pt_re_cnt': int(safe(r7,19) or 0), 'pt_re_amt': int(safe(r7,20) or 0),
-        'total_card': int(safe(r10,12) or 0), 'cash_out': int(safe(r10,14) or 0),
-        'account': int(safe(r10,16) or 0), 'deduction': int(safe(r10,18) or 0),
-        'real_cash_out': int(safe(r10,20) or 0), 'ranks': ranks})
-    print(f"  OK {fname}", file=sys.stderr)
 
-today_str = date.today().strftime('%Y%m%d')
+    results.append({
+        'branch': str(branch_name),
+        'target_fc':  to_int(safe(r2, 2)),
+        'target_pt':  to_int(safe(r2, 4)),
+        'target_tot': to_int(safe(r2, 6)),
+        'actual_fc':  to_int(safe(r3, 2)),
+        'actual_pt':  to_int(safe(r3, 4)),
+        'actual_tot': to_int(safe(r3, 6)),
+        'rate_fc':    pct(safe(r4, 2)),
+        'rate_pt':    pct(safe(r4, 4)),
+        'rate_tot':   pct(safe(r4, 6)),
+        'fc_new_cnt': to_int(safe(r7, 10)),
+        'fc_new_amt': to_int(safe(r7, 11)),
+        'fc_re_cnt':  to_int(safe(r7, 12)),
+        'fc_re_amt':  to_int(safe(r7, 13)),
+        'pt_new_cnt': to_int(safe(r7, 17)),
+        'pt_new_amt': to_int(safe(r7, 18)),
+        'pt_re_cnt':  to_int(safe(r7, 19)),
+        'pt_re_amt':  to_int(safe(r7, 20)),
+        'total_card': to_int(safe(r10, 12)),
+        'cash_out':   to_int(safe(r10, 14)),
+        'account':    to_int(safe(r10, 16)),
+        'deduction':  to_int(safe(r10, 18)),
+        'real_cash_out': to_int(safe(r10, 20)),
+        'ranks': ranks
+    })
+    print(f"  OK: {branch_name}", file=sys.stderr)
+
+if not results:
+    print("ERROR: no results parsed", file=sys.stderr); sys.exit(1)
+
+today = date.today()
+year, month, day = today.year, today.month, today.day
 data_json = json.dumps(results, ensure_ascii=False)
 
 html_path = os.path.join(script_dir, 'index.html')
-html = open(html_path).read()
-html = re.sub(r'const D_RAW = .*?;', f'const D_RAW = {data_json};', html)
-html = re.sub(r'(\d{4})\xb7(\d{2})\xb7(\d{2})', today_str, html)
-html = re.sub(r'20\d\d\xb477 \d\d\xb477 \d\d\xc77c', '', html)
+with open(html_path, encoding='utf-8') as f:
+    html = f.read()
 
-year = date.today().year
-month = date.today().month
-day = date.today().day
+html = re.sub(r'const D_RAW = \[.*?\];', f'const D_RAW = {data_json};', html, flags=re.DOTALL)
 html = re.sub(r'20\d\d년 \d+월 \d+일', f'{year}년 {month:02d}월 {day:02d}일', html)
 
 with open(html_path, 'w', encoding='utf-8') as f:
     f.write(html)
-print(f'Done: {html_path}', file=sys.stderr)
+print(f'Done: updated {len(results)} branches', file=sys.stderr)
