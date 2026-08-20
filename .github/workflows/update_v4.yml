@@ -1,0 +1,25 @@
+name: BGO Dashboard Update V4
+on:
+  push:
+    paths:
+      - 'data/**'
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install openpyxl
+      run: pip install openpyxl --quiet --break-system-packages || pip install openpyxl --quiet
+    - name: Run dashboard update script
+      run: python3 update_dashboard_fixed.py
+    - name: Commit index.html
+      run: |
+        git config user.email "github-actions@github.com"
+        git config user.name "GitHub Actions"
+        git add index.html
+        git diff --staged --quiet || git commit -m "BGO Dashboard V4 update"
+        git push
