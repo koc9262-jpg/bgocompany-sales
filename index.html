@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -88,18 +87,18 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
 </style>
 </head>
 <body>
-
+ 
 <div class="header">
   <div class="header-left">
     <h1>🏋️ <span>BGO</span> 매출 대시보드</h1>
-    <div class="date">기준일: 2026년 08월 19일 · 전체 지점</div>
+    <div class="date">기준일: 2026년 08월 20일 · 전체 지점</div>
   </div>
   <div class="header-right">
     <div class="hbadge hbadge-green" id="h-report"></div>
     <div class="hbadge hbadge-blue">2608 월간</div>
   </div>
 </div>
-
+ 
 <div class="main">
   <div class="kpi-grid">
     <div class="kpi kpi-blue">
@@ -124,7 +123,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
       <div class="sub" id="k-pt-sub"></div>
     </div>
   </div>
-
+ 
   <div class="section-hd">🏪 지점별 매출 현황</div>
   <div class="legend-bar">
     <div class="lg-item"><div class="lg-dot" style="background:#7c3aed"></div>달성률 40% 이상 (양호)</div>
@@ -133,7 +132,7 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
     <div class="lg-item"><div class="lg-dot" style="background:#ef4444"></div>20% 미만 (위험)</div>
   </div>
   <div class="branch-grid" id="branch-grid"></div>
-
+ 
   <div class="section-hd">📈 매출 분석</div>
   <div class="chart-grid">
     <div class="chart-box">
@@ -145,21 +144,21 @@ body{font-family:'Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var
       <div class="chart-wrap"><canvas id="chartFC"></canvas></div>
     </div>
   </div>
-
+ 
   <div class="section-hd">👑 PT 개인매출 종합 순위</div>
   <div class="rank-box">
     <div class="rk-header">전체 트레이너 순위</div>
     <div id="rank-list"></div>
   </div>
 </div>
-
-<div class="footer">휴메이크휘트니스 · 위스테이피트니스 · 모션하이브 | 데이터 기준: 2026년 08월 19일 | 매일 14:00 자동 갱신</div>
-
+ 
+<div class="footer">휴메이크휘트니스 · 위스테이피트니스 · 모션하이브 | 데이터 기준: 2026년 08월 20일 | 매일 14:00 자동 갱신</div>
+ 
 <script>
 const D_RAW = [{"branch": "역삼점", "target_fc": 25000000, "target_pt": 40000000, "target_tot": 65000000, "actual_fc": 11878000, "actual_pt": 11004000, "actual_tot": 22882000, "rate_fc": 47.5, "rate_pt": 27.5, "rate_tot": 35.2, "fc_new_cnt": 23, "fc_new_amt": 3694500, "fc_re_cnt": 20, "fc_re_amt": 6885000, "pt_new_cnt": 11, "pt_new_amt": 4154000, "pt_re_cnt": 10, "pt_re_amt": 6850000, "total_card": 22617000, "cash_out": 50000, "account": 215000, "deduction": 0, "real_cash_out": 265000, "ranks": [{"name": "이초은", "amount": 5524000}, {"name": "안도모", "amount": 4260000}, {"name": "진정경", "amount": 750000}, {"name": "김동옥", "amount": 130000}, {"name": "황하늘", "amount": 50000}, {"name": "안재원", "amount": 50000}]}, {"branch": "선정릉점", "target_fc": 42000000, "target_pt": 73000000, "target_tot": 115000000, "actual_fc": 14919700, "actual_pt": 38395000, "actual_tot": 53314700, "rate_fc": 35.5, "rate_pt": 52.6, "rate_tot": 46.4, "fc_new_cnt": 38, "fc_new_amt": 8354200, "fc_re_cnt": 14, "fc_re_amt": 4980600, "pt_new_cnt": 15, "pt_new_amt": 17325000, "pt_re_cnt": 10, "pt_re_amt": 21070000, "total_card": 50082700, "cash_out": 241000, "account": 2991000, "deduction": 2221000, "real_cash_out": 1011000, "ranks": [{"name": "변재용", "amount": 13108000}, {"name": "최성욱", "amount": 7855000}, {"name": "황용선", "amount": 6300000}, {"name": "장광희", "amount": 5602000}, {"name": "김영인", "amount": 3570000}, {"name": "전현동", "amount": 1880000}, {"name": "조건우", "amount": 80000}]}, {"branch": "대치점", "target_fc": 43000000, "target_pt": 77000000, "target_tot": 120000000, "actual_fc": 9468900, "actual_pt": 39899600, "actual_tot": 49368500, "rate_fc": 22.0, "rate_pt": 51.8, "rate_tot": 41.1, "fc_new_cnt": 26, "fc_new_amt": 5590900, "fc_re_cnt": 6, "fc_re_amt": 2657000, "pt_new_cnt": 15, "pt_new_amt": 17404400, "pt_re_cnt": 17, "pt_re_amt": 23100000, "total_card": 38588300, "cash_out": 7805000, "account": 3580000, "deduction": 1505000, "real_cash_out": 9880000, "ranks": [{"name": "배재민", "amount": 8856900}, {"name": "김준석", "amount": 11285000}, {"name": "전현아", "amount": 6480000}, {"name": "이기현", "amount": 5718000}, {"name": "이상훈", "amount": 4400700}, {"name": "한희수", "amount": 1610000}, {"name": "최태원", "amount": 1050000}, {"name": "김민준", "amount": 1038800}, {"name": "이만열", "amount": 65000}]}, {"branch": "송파점", "target_fc": 20000000, "target_pt": 45000000, "target_tot": 65000000, "actual_fc": 5957800, "actual_pt": 5420000, "actual_tot": 11377800, "rate_fc": 29.8, "rate_pt": 12.0, "rate_tot": 17.5, "fc_new_cnt": 16, "fc_new_amt": 3800600, "fc_re_cnt": 9, "fc_re_amt": 1813000, "pt_new_cnt": 0, "pt_new_amt": 0, "pt_re_cnt": 3, "pt_re_amt": 5420000, "total_card": 7538600, "cash_out": 3839200, "account": 0, "deduction": 4091000, "real_cash_out": -251800, "ranks": [{"name": "김원준", "amount": 3620000}, {"name": "김건우", "amount": 1800000}]}, {"branch": "장안점", "target_fc": 45000000, "target_pt": 65000000, "target_tot": 110000000, "actual_fc": 19117300, "actual_pt": 15180000, "actual_tot": 34297300, "rate_fc": 42.5, "rate_pt": 23.4, "rate_tot": 31.2, "fc_new_cnt": 28, "fc_new_amt": 9847000, "fc_re_cnt": 19, "fc_re_amt": 7404000, "pt_new_cnt": 5, "pt_new_amt": 5280000, "pt_re_cnt": 10, "pt_re_amt": 9900000, "total_card": 31675500, "cash_out": 843000, "account": 1778800, "deduction": 833800, "real_cash_out": 1788000, "ranks": [{"name": "김민수", "amount": 8580000}, {"name": "한어진", "amount": 2178000}, {"name": "이윤석", "amount": 2112000}, {"name": "송림명", "amount": 2310000}]}, {"branch": "가락점", "target_fc": 28000000, "target_pt": 40000000, "target_tot": 68000000, "actual_fc": 14010000, "actual_pt": 10100000, "actual_tot": 24110000, "rate_fc": 50.0, "rate_pt": 25.3, "rate_tot": 35.5, "fc_new_cnt": 27, "fc_new_amt": 6351000, "fc_re_cnt": 18, "fc_re_amt": 5577000, "pt_new_cnt": 12, "pt_new_amt": 9040000, "pt_re_cnt": 2, "pt_re_amt": 1060000, "total_card": 22706000, "cash_out": 670000, "account": 734000, "deduction": 300000, "real_cash_out": 1104000, "ranks": [{"name": "김필구", "amount": 3460000}, {"name": "송석민", "amount": 2600000}, {"name": "한승희", "amount": 1680000}, {"name": "고승우", "amount": 1100000}, {"name": "현민호", "amount": 600000}]}, {"branch": "삼전점", "target_fc": 25000000, "target_pt": 43000000, "target_tot": 68000000, "actual_fc": 10634200, "actual_pt": 18089000, "actual_tot": 28723200, "rate_fc": 42.5, "rate_pt": 42.1, "rate_tot": 42.2, "fc_new_cnt": 22, "fc_new_amt": 3180000, "fc_re_cnt": 19, "fc_re_amt": 5510000, "pt_new_cnt": 15, "pt_new_amt": 8752000, "pt_re_cnt": 9, "pt_re_amt": 9337000, "total_card": 20523200, "cash_out": 5726000, "account": 2474000, "deduction": 0, "real_cash_out": 8200000, "ranks": [{"name": "두민기", "amount": 2200000}, {"name": "윤휘용", "amount": 9719000}, {"name": "정회민", "amount": 150000}, {"name": "이재환", "amount": 6020000}]}];
-const DATE_STR = '2026년 08월 19일';
+const DATE_STR = '2026년 08월 20일';
 const PREFIX = '2608';
-
+ 
 const w = v => Math.round(v / 10000);
 const fmt = v => Math.abs(Math.round(v)).toLocaleString();
 function fmtMan(v) {
@@ -179,7 +178,7 @@ function rateBarColor(r) {
        : r >= 20 ? 'linear-gradient(90deg,#d97706,#fbbf24)'
        : 'linear-gradient(90deg,#b91c1c,#f87171)';
 }
-
+ 
 const branches = D_RAW.map(r => r.branch);
 const D = {}; D_RAW.forEach(r => { D[r.branch] = r; });
 const totAct   = D_RAW.reduce((s,r) => s + r.actual_tot, 0);
@@ -191,7 +190,7 @@ const totTgtPT = D_RAW.reduce((s,r) => s + r.target_pt,  0);
 const rateAll  = Math.round(totAct  / totTgt  * 1000) / 10;
 const rateFC   = Math.round(totActFC / totTgtFC * 1000) / 10;
 const ratePT   = Math.round(totActPT / totTgtPT * 1000) / 10;
-
+ 
 document.getElementById('h-report').textContent = '✅ ' + branches.length + '/' + branches.length + ' 보고 완료';
 document.getElementById('k-actual').textContent  = fmtMan(totAct);
 document.getElementById('k-target').textContent  = '목표 ' + fmtMan(totTgt);
@@ -202,7 +201,7 @@ document.getElementById('k-fc-rate').textContent = rateFC + '%';
 document.getElementById('k-fc-sub').textContent  = '실적 ' + fmtMan(totActFC) + ' / 목표 ' + fmtMan(totTgtFC);
 document.getElementById('k-pt-rate').textContent = ratePT + '%';
 document.getElementById('k-pt-sub').textContent  = '실적 ' + fmtMan(totActPT) + ' / 목표 ' + fmtMan(totTgtPT);
-
+ 
 (function() {
   const sorted = [...D_RAW].sort((a, b) => b.rate_tot - a.rate_tot);
   const grid = document.getElementById('branch-grid');
@@ -240,7 +239,7 @@ document.getElementById('k-pt-sub').textContent  = '실적 ' + fmtMan(totActPT) 
     </div>`;
   });
 })();
-
+ 
 (function() {
   const sorted = [...D_RAW].sort((a, b) => b.rate_tot - a.rate_tot);
   const labels = sorted.map(r => r.branch);
@@ -281,7 +280,7 @@ document.getElementById('k-pt-sub').textContent  = '실적 ' + fmtMan(totActPT) 
     }
   });
 })();
-
+ 
 (function() {
   let all = [];
   D_RAW.forEach(r => r.ranks.forEach(rk => all.push({ ...rk, branch: r.branch })));
